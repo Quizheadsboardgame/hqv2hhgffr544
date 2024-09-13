@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horror Quiz Box</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Baloo 2', sans-serif;
+            background-color: #5CE1E6;
+            color: black;
+            flex-direction: column;
+            margin: 0;
+            position: relative; /* For positioning the button */
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png'), /* Background image */
+                              url('https://www.transparenttextures.com/patterns/blood-stains.png'); /* Blood stains overlay */
+            background-size: cover, 100px 100px; /* Adjust size of blood stains */
+        }
+
+        #quiz-headings {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #yellow-box {
+            width: 200px;
+            height: 200px;
+            background-color: #FED405;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: 5px solid black;
+            text-transform: uppercase; /* Make text uppercase */
+        }
+
+        .color-boxes {
+            display: flex;
+            justify-content: space-between;
+            width: 220px;
+        }
+
+        .color-box {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #green-box {
+            background-color: #7FD15A;
+        }
+
+        #orange-box {
+            background-color: #FF914D;
+        }
+
+        #red-box {
+            background-color: #EE1D23;
+        }
+
+        #purple-box {
+            background-color: #8456E5;
+        }
+
+        #question-answer {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        #tagline {
+            margin-top: 40px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #go-back-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: transparent;
+            color: black;
+            border: 2px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-headings"></div>
+    <div id="yellow-box">HORROR</div>
+    <div class="color-boxes">
+        <div id="green-box" class="color-box"></div>
+        <div id="orange-box" class="color-box"></div>
+        <div id="red-box" class="color-box"></div>
+        <div id="purple-box" class="color-box"></div>
+    </div>
+    <div id="question-answer"></div>
+    <div id="tagline">QuizHeads. The forever changing trivia board game!</div>
+    <a id="go-back-button" href="https://quizheads.co.uk/masterquizzes">GO BACK</a>
+
+    <script>
+        const yellowBox = document.getElementById("yellow-box");
+        const greenBox = document.getElementById("green-box");
+        const orangeBox = document.getElementById("orange-box");
+        const redBox = document.getElementById("red-box");
+        const purpleBox = document.getElementById("purple-box");
+        const questionAnswerDiv = document.getElementById("question-answer");
+
+        // Array of horror trivia questions and answers
+        const horrorQuestions = [
+            { question: "What is the name of the killer in Halloween?", answer: "Michael Myers" },
+            { question: "Who directed the movie 'Psycho'?", answer: "Alfred Hitchcock" },
+            { question: "In 'The Shining', what is the famous phrase Jack Nicholson's character writes?", answer: "'All work and no play makes Jack a dull boy.'" },
+            { question: "What 1973 horror movie was banned in several countries for its graphic content?", answer: "The Exorcist" },
+            { question: "Which horror film features a serial killer wearing a William Shatner mask?", answer: "Halloween" },
+            { question: "What is the name of the demon in The Exorcist?", answer: "Pazuzu" },
+            { question: "In what year was 'The Texas Chain Saw Massacre' released?", answer: "1974" },
+            { question: "Which movie is known for the quote 'Do you like scary movies?'", answer: "Scream" },
+            { question: "What is the name of the camp in 'Friday the 13th'?", answer: "Camp Crystal Lake" },
+            { question: "Which movie features a haunted hotel with the name 'The Overlook'?", answer: "The Shining" },
+            { question: "What 2019 film involves a family being hunted by doppelgängers?", answer: "Us" },
+            { question: "Who directed the film 'Get Out'?", answer: "Jordan Peele" },
+            { question: "Which film features the character 'Regan MacNeil'?", answer: "The Exorcist" },
+            { question: "In 'A Nightmare on Elm Street', what is the name of the killer?", answer: "Freddy Krueger" },
+            { question: "What is the name of the demon in 'The Conjuring'?", answer: "Valak" },
+            { question: "Which movie features a doll named 'Chucky'?", answer: "Child's Play" },
+            { question: "What is the name of the family in 'The Addams Family'?", answer: "The Addams Family" },
+            { question: "Which film involves a haunted mirror?", answer: "Oculus" },
+            { question: "What is the name of the killer in 'Scream'?", answer: "Ghostface" },
+            { question: "Which film is set in a creepy orphanage and features a haunted well?", answer: "The Orphanage" },
+            { question: "Who directed 'The Babadook'?", answer: "Jennifer Kent" },
+            { question: "Which horror film involves a creepy red balloon?", answer: "It" },
+            { question: "What year was the original 'The Texas Chain Saw Massacre' released?", answer: "1974" },
+            { question: "Which movie features a haunted house on a hill?", answer: "House on Haunted Hill" },
+            { question: "What is the name of the killer in 'Friday the 13th'?", answer: "Jason Voorhees" },
+            { question: "Which film involves a sinister clown named 'Pennywise'?", answer: "It" },
+            { question: "What is the name of the haunted house in 'The Haunting'?", answer: "Hill House" },
+            { question: "Which movie features a cursed videotape?", answer: "The Ring" },
+            { question: "Who directed 'Hereditary'?", answer: "Ari Aster" },
+            { question: "What is the name of the demon in 'Insidious'?", answer: "The Lipstick-Face Demon" },
+            { question: "Which movie features a possessed child named 'Damien'?", answer: "The Omen" },
+            { question: "What is the name of the killer in 'Halloween'?", answer: "Michael Myers" },
+            { question: "Which film involves a haunted doll named 'Annabelle'?", answer: "Annabelle" },
+            { question: "What year was the movie 'The Exorcist' released?", answer: "1973" },
+            { question: "What is the name of the hotel in 'The Shining'?", answer: "The Overlook Hotel" },
+            { question: "Which film involves a haunted painting?", answer: "The Woman in Black" },
+            { question: "Who directed 'The Witch'?", answer: "Robert Eggers" },
+            { question: "What is the name of the film that involves a mysterious virus outbreak?", answer: "28 Days Later" },
+            { question: "Which movie features a sinister family named 'The Addams Family'?", answer: "The Addams Family" },
+            { question: "What year was 'A Nightmare on Elm Street' released?", answer: "1984" },
+            { question: "Which film features a haunted asylum?", answer: "Session 9" },
+            { question: "What is the name of the demon in 'The Exorcism of Emily Rose'?", answer: "A Demon" },
+            { question: "Which movie features a haunted mirror?", answer: "Oculus" },
+            { question: "What is the title of the 2017 film about a young girl with telekinetic powers?", answer: "Carrie" },
+            { question: "Which movie features a group of people trapped in a building during a zombie apocalypse?", answer: "Dawn of the Dead" },
+            { question: "Who starred as 'John McClane' in 'Die Hard'?", answer: "Bruce Willis" },
+            { question: "Which film features the character 'Norman Bates'?", answer: "Psycho" },
+            { question: "What is the name of the character played by Tom Hanks in 'Cast Away'?", answer: "Chuck Noland" },
+            { question: "Which movie features a group of friends in a road trip to Las Vegas?", answer: "The Hangover" },
+            { question: "What is the name of the animated film with a character named 'Moana'?", answer: "Moana" }
+        ];
+
+        let shuffledQuestions = [];
+        let questionIndex = 0;
+
+        // Shuffle the questions array
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize questions
+        function initializeQuestions() {
+            shuffledQuestions = shuffleArray([...horrorQuestions]);
+            questionIndex = 0;
+            displayQuestion();
+        }
+
+        // Function to display the current question
+        function displayQuestion() {
+            if (shuffledQuestions.length === 0) {
+                questionAnswerDiv.innerHTML = "<strong>No more questions!</strong>";
+                return;
+            }
+            const currentQA = shuffledQuestions[questionIndex];
+            questionAnswerDiv.innerHTML = `<strong>Question:</strong> ${currentQA.question}<br><strong>Answer:</strong> ${currentQA.answer}`;
+        }
+
+        // Change color of the yellow box when a color box is clicked
+        greenBox.addEventListener("click", () => {
+            yellowBox.style.backgroundColor = "#7FD15A";
+        });
+
+        orangeBox.addEventListener("click", () => {
+            yellowBox.style.backgroundColor = "#FF914D";
+        });
+
+        redBox.addEventListener("click", () => {
+            yellowBox.style.backgroundColor = "#EE1D23";
+        });
+
+        purpleBox.addEventListener("click", () => {
+            yellowBox.style.backgroundColor = "#8456E5";
+        });
+
+        // Generate a random question and display it when the yellow box is clicked
+        yellowBox.addEventListener("click", () => {
+            questionIndex = (questionIndex + 1) % shuffledQuestions.length;
+            displayQuestion();
+        });
+
+        // Initialize questions on page load
+        window.onload = initializeQuestions;
+    </script>
+
+</body>
+</html>
